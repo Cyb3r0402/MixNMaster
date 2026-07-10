@@ -1,6 +1,12 @@
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+function getResend() {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    throw new Error('Missing RESEND_API_KEY env var');
+  }
+  return new Resend(apiKey);
+}
 
 interface OrderEmailData {
   customerName: string;
@@ -41,6 +47,7 @@ export async function sendOrderNotification(data: OrderEmailData) {
     </div>
   `;
 
+  const resend = getResend();
   await resend.emails.send({
     from: process.env.EMAIL_FROM || 'orders@yourdomain.com',
     to: process.env.NOTIFY_EMAIL || 'Kalebmay18@gmail.com',
@@ -79,6 +86,7 @@ export async function sendCustomerConfirmation(data: CustomerEmailData) {
     </div>
   `;
 
+  const resend = getResend();
   await resend.emails.send({
     from: process.env.EMAIL_FROM || 'orders@yourdomain.com',
     to: data.customerEmail,
