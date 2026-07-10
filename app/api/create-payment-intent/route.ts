@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { stripe } from '@/lib/stripe';
+import { getStripe } from '@/lib/stripe';
 import { priceInCents, SERVICES, type ServiceId } from '@/lib/pricing';
 
 interface UploadedFile {
@@ -54,6 +54,11 @@ export async function POST(request: Request) {
     metadata[`file_${i}_url`] = file.url.slice(0, 480);
     metadata[`file_${i}_name`] = file.name.slice(0, 100);
   });
+
+  const stripe = getStripe();
+  if (!stripe) {
+    return NextResponse.json({ error: 'Payment processing not configured.' }, { status: 500 });
+  }
 
   const paymentIntent = await stripe.paymentIntents.create({
     amount,

@@ -17,6 +17,9 @@ interface OrderView {
 }
 
 async function getOrders(startingAfter?: string): Promise<{ orders: OrderView[]; hasMore: boolean }> {
+  if (!stripe) {
+    return { orders: [], hasMore: false };
+  }
   const list = await stripe.paymentIntents.list({
     limit: 20,
     starting_after: startingAfter,
