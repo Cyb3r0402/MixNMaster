@@ -57,20 +57,38 @@ export async function POST(request: Request) {
 
   const stripe = getStripe();
   if (!stripe) {
-    return NextResponse.json({ error: 'Payment processing not configured.' }, { status: 500 });
+    console.error(
+      'STRIPE_SECRET_KEY is missing at runtime. Confirm the production environment variable is defined for the deployed Vercel project.',
+    );
+    return NextResponse.json(
+      { error: 'Payment processing not configured. STRIPE_SECRET_KEY is missing.' },
+      { status: 500 },
+    );
   }
 
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount,
-    currency: 'usd',
-    automatic_payment_methods: { enabled: true },
-    receipt_email: payload.email,
-    metadata,
-    description: `${SERVICES[payload.service].label} — ${payload.name}`,
-  });
+  try {
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount,
+      currency: 'usd',
+      automatic_payment_methods: { enabled: true },
+      receipt_email: payload.email,
+      metadata,
+      description: `${SERVICES[payload.service].label} — ${payload.name}`,
+    });
 
-  return NextResponse.json({
-    clientSecret: paymentIntent.client_secret,
-    amount,
-  });
+    return NextResponse.json({
+      clientSecret: paymentIntent.client_secret,
+      amount,
+    });
+  } catch (error) {
+    console.error('Stripe PaymentIntent creation failed:', error);
+    return NextResponse.json(
+      {
+        error:
+          'Payment processing failed. ' +
+          (error instanceof Error ? error.message : 'Unknown Stripe error.'),
+      },
+      { status: 500 },
+    );
+  }
 }
