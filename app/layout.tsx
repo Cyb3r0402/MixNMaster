@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Barlow_Condensed, Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
+import { Analytics } from "@vercel/analytics/next"
 
 const display = Barlow_Condensed({
   subsets: ['latin'],
@@ -30,6 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </a>
           </div>
         </header>
+        <Analytics />
         {children}
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9889333502930604"
      crossOrigin="anonymous"></script>
