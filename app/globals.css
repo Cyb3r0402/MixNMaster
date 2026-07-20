@@ -56,3 +56,51 @@ html {
   pointer-events: none;
   z-index: 9999;
 }
+
+/* --- Navbar active link underline animation --- */
+.nav-underline {
+  animation: nav-underline-in 0.3s ease-out;
+}
+@keyframes nav-underline-in {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* --- Carousel scroll --- */
+.carousel-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.carousel-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* --- Terms of Service typography --- */
+.terms-content h2 {
+  scroll-margin-top: 6rem;
+}
+.terms-content p {
+  margin-top: 1rem;
+  font-size: 0.9375rem;
+  line-height: 1.75;
+  color: rgba(244, 238, 225, 0.65);
+}
+.terms-content ul {
+  margin-top: 0.75rem;
+  padding-left: 1.5rem;
+  list-style-type: disc;
+}
+.terms-content ul li {
+  margin-top: 0.5rem;
+  font-size: 0.9375rem;
+  line-height: 1.75;
+  color: rgba(244, 238, 225, 0.65);
+}
+.terms-content strong {
+  color: rgba(244, 238, 225, 0.9);
+  font-weight: 600;
+}
